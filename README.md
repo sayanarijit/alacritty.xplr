@@ -1,13 +1,10 @@
-xplr plugin template
-====================
-
-Use this template to [write your own xplr plugin](https://arijitbasu.in/xplr/en/writing-plugins.html).
-
+Alacritty.xplr
+==============
 
 Requirements
 ------------
 
-- Some tool
+- [Alacritty](https://github.com/alacritty/alacritty)
 
 
 Installation
@@ -26,26 +23,31 @@ Installation
   ```bash
   mkdir -p ~/.config/xplr/plugins
 
-  git clone https://github.com/me/{plugin}.xplr ~/.config/xplr/plugins/{plugin}
+  git clone https://github.com/sayanarijit/alacritty.xplr ~/.config/xplr/plugins/alacritty
   ```
 
 - Require the module in `~/.config/xplr/init.lua`
 
   ```lua
-  require("{plugin}").setup()
+  require("alacritty").setup()
   
   -- Or
   
-  require("{plugin}").setup{
-    mode = "action",
-    key = ":",
+  require("alacritty").setup{
+    mode = "default",
+    key = "ctrl-n",
+    send_focus = true,
+    send_selection = true,
+    extra_alacritty_args = "",
+    extra_xplr_args = "",
   }
 
-  -- Type `::` and enjoy.
+  -- Press `ctrl-n` to spawn a new alacritty window with the current selection
   ```
 
 
 Features
 --------
 
-- Some cool feature
+- Send current focus to the new session.
+- Send current selection to the new session.
