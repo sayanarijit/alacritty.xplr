@@ -53,3 +53,4 @@ Features
 
 - Send current focus to the new session.
 - Send current selection to the new session.
+- Send active sorters and filters to the new session.

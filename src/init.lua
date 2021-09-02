@@ -12,23 +12,43 @@ local function setup(args)
 
   xplr.fn.custom.alacritty_spawn_window = function(app)
     local cmd = "alacritty " .. args.extra_alacritty_args .. " --command xplr"
+    cmd = cmd .. " --on-load ClearNodeFilters ClearNodeSorters"
+
+    for _, x in ipairs(app.explorer_config.filters) do
+      cmd = cmd
+        .. [[ 'AddNodeFilter: { filter: "]]
+        .. x.filter
+        .. [[", input: "]]
+        .. x.input
+        .. [[" }']]
+    end
+
+    for _, x in ipairs(app.explorer_config.sorters) do
+      cmd = cmd
+        .. [[ 'AddNodeSorter: { sorter: "]]
+        .. x.sorter
+        .. [[", reverse: ]]
+        .. tostring(x.reverse)
+        .. [[ }']]
+    end
+
+    cmd = cmd .. " ExplorePwd"
+
     if args.send_focus and app.focused_node then
       cmd = cmd
-        .. [[ --on-load 'FocusPath: "]]
+        .. [[ 'FocusPath: "]]
         .. app.focused_node.absolute_path
         .. [["']]
     end
 
     if args.send_selection then
       for _, node in ipairs(app.selection) do
-        cmd = cmd
-          .. [[ --on-load 'SelectPath: "]]
-          .. node.absolute_path
-          .. [["']]
+        cmd = cmd .. [[ 'SelectPath: "]] .. node.absolute_path .. [["']]
       end
     end
 
     cmd = cmd .. " " .. args.extra_xplr_args .. " &"
+
     os.execute(cmd)
   end
 
