@@ -1,5 +1,4 @@
-Alacritty.xplr
-==============
+[![alacritty-xplr.gif](https://s9.gifyu.com/images/alacritty-xplr.gif)](https://gifyu.com/image/GJGU)
 
 Requirements
 ------------
