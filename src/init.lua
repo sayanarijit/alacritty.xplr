@@ -54,7 +54,6 @@ local function setup(args)
 
   local messages = {
     { CallLuaSilently = "custom.alacritty_spawn_window" },
-    "ExplorePwdAsync",
     "PopMode",
   }
 
