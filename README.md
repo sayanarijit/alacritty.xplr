@@ -6,7 +6,7 @@
 Requirements
 ------------
 
-- [Alacritty](https://github.com/alacritty/alacritty)
+- [Alacritty](https://github.com/alacritty/alacritty) (recommended) or any other terminal capable of launching programs
 
 
 Installation
@@ -40,11 +40,24 @@ Installation
     key = "ctrl-n",
     send_focus = true,
     send_selection = true,
-    extra_alacritty_args = "",
+    extra_term_args = "",
     extra_xplr_args = "",
   }
 
-  -- Press `ctrl-n` to spawn a new alacritty window with the current selection
+  -- Or
+
+  require('alacritty').setup{
+    mode = 'default',
+    key = 'ctrl-n',
+    send_focus = true,
+    send_selection = false,
+    exe = 'kitty',
+    extra_term_args = '@launch --no-response --location=vsplit',
+    extra_xplr_args = '',
+  }
+
+
+  -- Press `ctrl-n` to spawn a new terminal window with the current selection
   ```
 
 
