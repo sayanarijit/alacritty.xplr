@@ -5,10 +5,16 @@ local function setup(args)
   args = args or {}
   args.mode = args.mode or "default"
   args.key = args.key or "ctrl-n"
-  args.send_selection = args.send_selection or true
-  args.send_focus = args.send_focus or true
   args.extra_alacritty_args = args.extra_alacritty_args or ""
   args.extra_xplr_args = args.extra_xplr_args or ""
+
+  if args.send_selection == nil then
+    args.send_selection = true
+  end
+
+  if args.send_focus == nil then
+    args.send_focus = args.send_focus or true
+  end
 
   xplr.fn.custom.alacritty_spawn_window = function(app)
     local cmd = "alacritty " .. args.extra_alacritty_args .. " --command xplr"
