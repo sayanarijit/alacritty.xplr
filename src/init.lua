@@ -13,7 +13,7 @@ local function setup(args)
   end
 
   if args.send_focus == nil then
-    args.send_focus = args.send_focus or true
+    args.send_focus = true
   end
 
   xplr.fn.custom.alacritty_spawn_window = function(app)
