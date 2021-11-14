@@ -18,22 +18,6 @@ local function setup(args)
 
   xplr.fn.custom.alacritty_spawn_window = function(app)
     local cmd = "alacritty " .. args.extra_alacritty_args .. " --command xplr"
-
-    if args.send_focus and app.focused_node then
-      cmd = cmd
-        .. [[ --force-focus ']]
-        .. app.focused_node.absolute_path
-        .. [[']]
-    else
-      cmd = cmd .. [[ ']] .. app.pwd .. [[']]
-    end
-
-    if args.send_selection then
-      for _, node in ipairs(app.selection) do
-        cmd = cmd .. [[ ']] .. node.absolute_path .. [[']]
-      end
-    end
-
     cmd = cmd .. " --on-load ClearNodeFilters ClearNodeSorters"
 
     for _, x in ipairs(app.explorer_config.filters) do
@@ -56,13 +40,30 @@ local function setup(args)
 
     cmd = cmd .. " ExplorePwd"
 
-    cmd = cmd .. " " .. args.extra_xplr_args .. " &"
+    cmd = cmd .. " " .. args.extra_xplr_args
+
+    if args.send_focus and app.focused_node then
+      cmd = cmd
+        .. [[ --force-focus -- ']]
+        .. app.focused_node.absolute_path
+        .. [[']]
+    else
+      cmd = cmd .. [[ -- ']] .. app.pwd .. [[']]
+    end
+
+    if args.send_selection then
+      for _, node in ipairs(app.selection) do
+        cmd = cmd .. [[ ']] .. node.absolute_path .. [[']]
+      end
+    end
+
+    cmd = cmd .. " &"
 
     os.execute(cmd)
   end
 
   local messages = {
-    { CallLuaSilently = "custom.alacritty_spawn_window" },
+    { CallLua = "custom.alacritty_spawn_window" },
     "PopMode",
   }
 
