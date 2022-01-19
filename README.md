@@ -2,22 +2,23 @@
 
 > **TIP:** Use it with [xclip.xplr](https://github.com/sayanarijit/xclip.xplr) for better copy-paste experience.
 
-
-Requirements
-------------
+## Requirements
 
 - [Alacritty](https://github.com/alacritty/alacritty)
 
-
-Installation
-------------
+## Installation
 
 ### Install manually
 
 - Add the following line in `~/.config/xplr/init.lua`
 
   ```lua
-  package.path = os.getenv("HOME") .. '/.config/xplr/plugins/?/src/init.lua'
+  local home = os.getenv("HOME")
+  package.path = home
+  .. "/.config/xplr/plugins/?/init.lua;"
+  .. home
+  .. "/.config/xplr/plugins/?.lua;"
+  .. package.path
   ```
 
 - Clone the plugin
@@ -32,9 +33,9 @@ Installation
 
   ```lua
   require("alacritty").setup()
-  
+
   -- Or
-  
+
   require("alacritty").setup{
     mode = "default",
     key = "ctrl-n",
@@ -47,9 +48,7 @@ Installation
   -- Press `ctrl-n` to spawn a new alacritty window with the current selection
   ```
 
-
-Features
---------
+## Features
 
 - Send current focus to the new session.
 - Send current selection to the new session.
