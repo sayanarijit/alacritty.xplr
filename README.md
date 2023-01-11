@@ -41,7 +41,10 @@
     key = "ctrl-n",
     send_focus = true,
     send_selection = true,
+    send_vroot = true,
+    alacritty_bin = "alacritty"
     extra_alacritty_args = "",
+    xplr_bin = "xplr"
     extra_xplr_args = "",
   }
 
@@ -53,3 +56,4 @@
 - Send current focus to the new session.
 - Send current selection to the new session.
 - Send active sorters and filters to the new session.
+- Send current vroot

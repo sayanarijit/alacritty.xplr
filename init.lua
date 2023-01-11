@@ -1,3 +1,5 @@
+local q = xplr.util.shell_quote
+
 local function setup(args)
   local xplr = xplr
 
@@ -5,6 +7,8 @@ local function setup(args)
   args = args or {}
   args.mode = args.mode or "default"
   args.key = args.key or "ctrl-n"
+  args.xplr_bin = args.xplr_bin or "xplr"
+  args.alacritty_bin = args.alacritty_bin or "alacritty"
   args.extra_alacritty_args = args.extra_alacritty_args or ""
   args.extra_xplr_args = args.extra_xplr_args or ""
 
@@ -16,54 +20,57 @@ local function setup(args)
     args.send_focus = true
   end
 
-  xplr.fn.custom.alacritty_spawn_window = function(app)
-    local cmd = "alacritty " .. args.extra_alacritty_args .. " --command xplr"
-    cmd = cmd .. " --on-load ClearNodeFilters ClearNodeSorters"
+  if args.send_vroot == nil then
+    args.send_vroot = true
+  end
+
+  xplr.fn.custom.alacritty = {}
+  xplr.fn.custom.alacritty.spawn_window = function(app)
+    local cmd = q(args.alacritty_bin)
+      .. " "
+      .. args.extra_alacritty_args
+      .. " --command "
+      .. q(args.xplr_bin)
+      .. " --on-load ClearNodeFilters ClearNodeSorters"
 
     for _, x in ipairs(app.explorer_config.filters) do
-      cmd = cmd
-        .. [[ 'AddNodeFilter: { filter: "]]
-        .. x.filter
-        .. [[", input: "]]
-        .. x.input
-        .. [[" }']]
+      local msg = { AddNodeFilter = { filter = x.filter, input = x.input } }
+      msg = xplr.util.to_json(msg)
+      cmd = cmd .. " " .. xplr.util.shell_quote(msg)
     end
 
     for _, x in ipairs(app.explorer_config.sorters) do
-      cmd = cmd
-        .. [[ 'AddNodeSorter: { sorter: "]]
-        .. x.sorter
-        .. [[", reverse: ]]
-        .. tostring(x.reverse)
-        .. [[ }']]
+      local msg = { AddNodeSorter = { sorter = x.sorter, reverse = x.reverse } }
+      msg = xplr.util.to_json(msg)
+      cmd = cmd .. " " .. xplr.util.shell_quote(msg)
     end
 
     cmd = cmd .. " ExplorePwd"
 
     cmd = cmd .. " " .. args.extra_xplr_args
 
+    if args.send_vroot and app.vroot then
+      cmd = cmd .. " --vroot " .. q(app.vroot)
+    end
+
     if args.send_focus and app.focused_node then
-      cmd = cmd
-        .. [[ --force-focus -- ']]
-        .. app.focused_node.absolute_path
-        .. [[']]
+      cmd = cmd .. " --force-focus -- " .. q(app.focused_node.absolute_path)
     else
-      cmd = cmd .. [[ -- ']] .. app.pwd .. [[']]
+      cmd = cmd .. " -- " .. q(app.pwd)
     end
 
     if args.send_selection then
       for _, node in ipairs(app.selection) do
-        cmd = cmd .. [[ ']] .. node.absolute_path .. [[']]
+        cmd = cmd .. " " .. q(node.absolute_path)
       end
     end
 
     cmd = cmd .. " &"
-
     os.execute(cmd)
   end
 
   local messages = {
-    { CallLua = "custom.alacritty_spawn_window" },
+    { CallLua = "custom.alacritty.spawn_window" },
     "PopMode",
   }
 
@@ -77,4 +84,5 @@ local function setup(args)
   }
 end
 
-return { setup = setup }
+-- return { setup = setup }
+setup()
