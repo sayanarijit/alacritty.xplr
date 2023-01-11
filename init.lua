@@ -84,5 +84,4 @@ local function setup(args)
   }
 end
 
--- return { setup = setup }
-setup()
+return { setup = setup }
