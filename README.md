@@ -42,9 +42,9 @@
     send_focus = true,
     send_selection = true,
     send_vroot = true,
-    alacritty_bin = "alacritty"
+    alacritty_bin = "alacritty",
     extra_alacritty_args = "",
-    xplr_bin = "xplr"
+    xplr_bin = "xplr",
     extra_xplr_args = "",
   }
 
